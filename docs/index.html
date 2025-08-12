@@ -21,22 +21,24 @@
     }
 
     * {
-      box-sizing: border-box
+      box-sizing: border-box;
     }
 
     html,
     body {
-      height: 100%
+      height: 100%;
     }
 
     body {
       margin: 0;
       font-family: 'Poppins', system-ui, Segoe UI, Roboto, Arial, sans-serif;
       color: var(--text);
-      background: radial-gradient(1200px 800px at 10% 10%, #0b1220 0%, var(--bg) 60%),
+      background:
+        radial-gradient(1200px 800px at 10% 10%, #0b1220 0%, var(--bg) 60%),
         radial-gradient(1000px 900px at 90% 30%, #111827 0%, var(--bg) 70%);
     }
 
+    /* Header */
     header {
       position: fixed;
       top: 0;
@@ -55,7 +57,7 @@
 
     header .brand {
       font-weight: 600;
-      letter-spacing: .3px
+      letter-spacing: .3px;
     }
 
     header nav a,
@@ -72,14 +74,15 @@
 
     header nav a:hover,
     header nav button:hover {
-      opacity: 1
+      opacity: 1;
     }
 
+    /* Layout */
     main {
       min-height: 100vh;
       padding: 96px 20px 40px;
       display: grid;
-      place-items: center
+      place-items: center;
     }
 
     .card {
@@ -88,7 +91,9 @@
       border: 1px solid #1f2937;
       border-radius: 24px;
       padding: 36px;
-      box-shadow: 0 20px 60px #0008, inset 0 1px 0 #334155;
+      box-shadow:
+        0 20px 60px #0008,
+        inset 0 1px 0 #334155;
       display: grid;
       gap: 24px;
     }
@@ -97,11 +102,12 @@
       display: grid;
       gap: 20px;
       align-items: center;
-      grid-template-columns: 1.2fr 1fr
+      grid-template-columns: 1.2fr 1fr;
     }
 
+    /* Media */
     .media {
-      position: relative
+      position: relative;
     }
 
     .media img {
@@ -110,7 +116,7 @@
       object-fit: cover;
       border-radius: 18px;
       border: 1px solid #1f2937;
-      display: block
+      display: block;
     }
 
     .ph {
@@ -119,16 +125,18 @@
       aspect-ratio: 4/3;
       border-radius: 18px;
       border: 1px solid var(--line);
-      background: repeating-linear-gradient(45deg, #0e1a33, #0e1a33 12px, #122042 12px, #122042 24px);
+      background:
+        repeating-linear-gradient(45deg, #0e1a33, #0e1a33 12px, #122042 12px, #122042 24px);
       place-items: center;
       color: #cbd5e1;
       font-weight: 600;
     }
 
+    /* Typo */
     h1 {
       margin: 0;
       font-size: clamp(28px, 5vw, 56px);
-      line-height: 1.1
+      line-height: 1.1;
     }
 
     .glow {
@@ -136,19 +144,20 @@
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
-      text-shadow: 0 0 24px #60a5fa40
+      text-shadow: 0 0 24px #60a5fa40;
     }
 
     p {
       margin: 0;
-      opacity: .9
+      opacity: .9;
     }
 
+    /* Buttons */
     .actions {
       display: flex;
       gap: 12px;
       flex-wrap: wrap;
-      margin-top: 10px
+      margin-top: 10px;
     }
 
     .btn {
@@ -158,46 +167,53 @@
       background: var(--card);
       color: var(--text);
       cursor: pointer;
-      transition: transform .15s ease, background .2s ease, border-color .2s ease;
+      transition:
+        transform .15s ease,
+        background .2s ease,
+        border-color .2s ease;
     }
 
     .btn.primary {
       background: linear-gradient(90deg, #1d4ed8, #2563eb);
-      border-color: #1d4ed8
+      border-color: #1d4ed8;
     }
 
     .btn:hover {
-      transform: translateY(-1px)
+      transform: translateY(-1px);
     }
 
+    /* Grid preview */
     .grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 16px
+      gap: 16px;
     }
 
     .tile {
       padding: 16px;
       border: 1px solid var(--line);
       border-radius: 16px;
-      background: var(--card)
+      background: var(--card);
     }
 
+    /* Footer */
     footer {
       text-align: center;
       padding: 32px 16px;
-      opacity: .7
+      opacity: .7;
     }
 
-    @media (max-width:880px) {
+    /* Responsive */
+    @media (max-width: 880px) {
       .hero {
-        grid-template-columns: 1fr
+        grid-template-columns: 1fr;
       }
     }
 
+    /* Modal */
     dialog::backdrop {
       background: #0008;
-      backdrop-filter: blur(2px)
+      backdrop-filter: blur(2px);
     }
 
     dialog {
@@ -205,7 +221,7 @@
       border-radius: 16px;
       background: var(--card);
       color: var(--text);
-      padding: 20px
+      padding: 20px;
     }
   </style>
 </head>
@@ -214,9 +230,9 @@
   <header>
     <div class="brand">💙 For You</div>
     <nav>
-      <a href="#about">About</a>
-      <a href="#memories">Memories</a>
-      <a href="#note">Note</a>
+      <a href="index.html">Home</a>
+      <a href="memories.html">Memories</a>
+      <a href="note.html">Note</a>
       <button id="helpBtn">Help</button>
     </nav>
   </header>
@@ -225,11 +241,15 @@
     <section class="card" id="about">
       <div class="hero">
         <div>
+          <!-- FRONT TITLE CHANGED HERE -->
           <h1>Hey <span class="glow">Kinsley</span> ✨</h1>
-          <p>This is a little site I made just for you for while I'm gone. It is full of love & memories.</p>
+
+          <p>This is a little site I made just for you — simple, sincere, and full of love.</p>
+
           <div class="actions">
-            <a class="btn primary" href="#memories">See memories</a>
-            <button class="btn" id="randomNoteBtn">Random sweet note</button>
+            <a class="btn primary" href="memories.html">See memories</a>
+            <!-- NOTE BUTTON NOW LINKS TO SEPARATE PAGE -->
+            <a class="btn" href="note.html">Random sweet note</a>
           </div>
         </div>
 
@@ -240,6 +260,7 @@
         </div>
       </div>
 
+      <!-- Optional preview tiles (keep or replace with your own) -->
       <div class="grid" id="memories">
         <div class="tile">
           <img src="images/us-at-the-game.jpg" alt="At the game"
@@ -251,52 +272,41 @@
         <div class="tile">Your laugh. Always your laugh.</div>
       </div>
 
-      <div id="note" class="tile" style="margin-top:16px;">
-        <strong>Note to you:</strong>
-        <p id="noteText">You make the ordinary feel magical.</p>
-      </div>
+      <!-- The old in-page #note block was removed to avoid confusion since note.html is the destination now -->
     </section>
   </main>
 
-  <footer>Made with 💙 and a ridiculous grin.</footer>
+  <footer>
+    Made with 💙 and a ridiculous grin.
+  </footer>
 
+  <!-- Help modal -->
   <dialog id="helpModal">
     <h3>How to use this site</h3>
     <ol>
       <li>Put photos in <code>docs/images/</code> (same names as in the HTML or update the paths).</li>
       <li>GitHub Pages must be set to <strong>Branch: main</strong>, <strong>Folder: /docs</strong>.</li>
-      <li>Click “Random sweet note” for a surprise.</li>
+      <li>Click “Random sweet note” to open a dedicated page for your message.</li>
     </ol>
     <button class="btn" id="closeHelp">Close</button>
   </dialog>
 
   <script>
     (function () {
-      var notes = [
-        "I'm proud of the person you are.",
-        "You're my favorite notification.",
-        "With you, even grocery runs are adventures.",
-        "You're the best part of my day, every day.",
-        "Your smile is my screensaver—forever."
-      ];
-
-      var noteText = document.getElementById("noteText");
-      var randomBtn = document.getElementById("randomNoteBtn");
-      if (randomBtn) {
-        randomBtn.addEventListener("click", function () {
-          var pick = notes[Math.floor(Math.random() * notes.length)];
-          noteText.textContent = pick;
-        });
-      }
-
+      // Help modal wiring only (random note JS removed)
       var helpModal = document.getElementById("helpModal");
       var helpBtn = document.getElementById("helpBtn");
       var closeBtn = document.getElementById("closeHelp");
+
       if (helpBtn && helpModal) {
-        helpBtn.addEventListener("click", function () { helpModal.showModal(); });
+        helpBtn.addEventListener("click", function () {
+          helpModal.showModal();
+        });
       }
       if (closeBtn && helpModal) {
-        closeBtn.addEventListener("click", function () { helpModal.close(); });
+        closeBtn.addEventListener("click", function () {
+          helpModal.close();
+        });
       }
     })();
   </script>

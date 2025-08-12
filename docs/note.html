@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>A Sweet Note 💙</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0f172a;
+            --text: #e5e7eb;
+            --card: #0b1324;
+            --line: #374151;
+            --accent: #60a5fa;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Poppins', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: grid;
+            grid-template-rows: auto 1fr;
+        }
+
+        header {
+            padding: 20px;
+            background: #0f172a80;
+            border-bottom: 1px solid #1f2937;
+            backdrop-filter: blur(6px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        main {
+            display: grid;
+            place-items: center;
+            padding: 20px;
+        }
+
+        .paper {
+            max-width: 800px;
+            width: 100%;
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            padding: 28px;
+            line-height: 1.7;
+            font-size: 1.15rem;
+        }
+
+        a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        /* Animation */
+        .word {
+            opacity: 0;
+            display: inline;
+            animation: fadeIn 0.3s forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>💌 A Sweet Note</h1>
+        <a href="index.html">⬅ Back to Home</a>
+    </header>
+    <main>
+        <article class="paper" id="noteText">
+            <!-- Words will be animated in here -->
+        </article>
+    </main>
+
+    <script>
+        const text = `From the moment you stepped into my life, everything shifted in the best way possible. You’ve brought color to days that used to feel gray, laughter to moments that might have been forgotten, and a sense of comfort that I didn’t know I was missing. You’ve shown me the beauty in the smallest things—the way the world looks softer when you’re around, how even the quiet moments feel alive just because you’re in them. There’s a kind of magic in the way you make the ordinary feel extraordinary, and I can’t help but feel grateful for every single memory we’ve made so far. I hope you know that this is more than just affection; it’s admiration for the person you are—your kindness, your strength, and your ability to light up a room without even trying. No matter where life takes us, I want you to remember this: you matter more to me than I could ever put into words, and my days are better simply because they have you in them.`;
+
+        const container = document.getElementById("noteText");
+        const words = text.split(" ");
+        words.forEach((word, i) => {
+            const span = document.createElement("span");
+            span.textContent = word;
+            span.className = "word";
+            span.style.animationDelay = `${i * 0.08}s`;
+            container.appendChild(span);
+            container.appendChild(document.createTextNode(" ")); // adds spacing between words
+        });
+    </script>
+</body>
+
+</html>
