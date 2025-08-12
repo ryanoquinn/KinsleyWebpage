@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -8,62 +9,207 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
   <style>
     :root {
       --bg: #0f172a;
-      --card: #111827cc;
       --text: #e5e7eb;
+      --card: #0b1324;
+      --line: #374151;
       --accent: #60a5fa;
-      --accent-2: #f472b6;
+      --accent2: #f472b6;
     }
-    * { box-sizing: border-box; }
-    html, body { height: 100%; margin: 0; }
+
+    * {
+      box-sizing: border-box
+    }
+
+    html,
     body {
-      font-family: 'Poppins', sans-serif;
+      height: 100%
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Poppins', system-ui, Segoe UI, Roboto, Arial, sans-serif;
       color: var(--text);
       background: radial-gradient(1200px 800px at 10% 10%, #0b1220 0%, var(--bg) 60%),
-                  radial-gradient(1000px 900px at 90% 30%, #111827 0%, var(--bg) 70%);
+        radial-gradient(1000px 900px at 90% 30%, #111827 0%, var(--bg) 70%);
     }
+
     header {
-      position: fixed; top: 0; left: 0; right: 0; height: 64px;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 20px; backdrop-filter: blur(6px);
-      background: #0f172a80; border-bottom: 1px solid #1f2937;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      background: #0f172a80;
+      backdrop-filter: blur(6px);
+      border-bottom: 1px solid #1f2937;
+      z-index: 10;
     }
-    header .brand { font-weight: 600; }
-    header nav a { color: var(--text); text-decoration: none; margin-left: 16px; opacity: 0.85; }
-    header nav a:hover { opacity: 1; }
-    main { padding: 96px 20px 40px; display: grid; place-items: center; }
+
+    header .brand {
+      font-weight: 600;
+      letter-spacing: .3px
+    }
+
+    header nav a,
+    header nav button {
+      color: var(--text);
+      text-decoration: none;
+      margin-left: 16px;
+      opacity: .9;
+      background: none;
+      border: 0;
+      cursor: pointer;
+      font: inherit;
+    }
+
+    header nav a:hover,
+    header nav button:hover {
+      opacity: 1
+    }
+
+    main {
+      min-height: 100vh;
+      padding: 96px 20px 40px;
+      display: grid;
+      place-items: center
+    }
+
     .card {
-      width: min(100%, 980px);
+      width: min(100%, 1000px);
       background: linear-gradient(180deg, #111827cc, #0b1324cc);
       border: 1px solid #1f2937;
-      box-shadow: 0 20px 60px #0008, inset 0 1px 0 #334155;
       border-radius: 24px;
       padding: 36px;
-      display: grid; gap: 24px;
+      box-shadow: 0 20px 60px #0008, inset 0 1px 0 #334155;
+      display: grid;
+      gap: 24px;
     }
-    .hero { display: grid; gap: 20px; align-items: center; grid-template-columns: 1.2fr 1fr; }
-    .hero img { width: 100%; border-radius: 18px; border: 1px solid #1f2937; }
-    h1 { font-size: clamp(28px, 5vw, 56px); margin: 0; }
+
+    .hero {
+      display: grid;
+      gap: 20px;
+      align-items: center;
+      grid-template-columns: 1.2fr 1fr
+    }
+
+    .media {
+      position: relative
+    }
+
+    .media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 18px;
+      border: 1px solid #1f2937;
+      display: block
+    }
+
+    .ph {
+      display: none;
+      width: 100%;
+      aspect-ratio: 4/3;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: repeating-linear-gradient(45deg, #0e1a33, #0e1a33 12px, #122042 12px, #122042 24px);
+      place-items: center;
+      color: #cbd5e1;
+      font-weight: 600;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(28px, 5vw, 56px);
+      line-height: 1.1
+    }
+
     .glow {
-      background: linear-gradient(90deg, var(--accent), var(--accent-2));
-      -webkit-background-clip: text; color: transparent;
-      text-shadow: 0 0 24px #60a5fa40;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 0 24px #60a5fa40
     }
+
+    p {
+      margin: 0;
+      opacity: .9
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 10px
+    }
+
     .btn {
-      padding: 12px 16px; border-radius: 12px; border: 1px solid #374151;
-      color: var(--text); cursor: pointer; background: #0b1324;
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: var(--card);
+      color: var(--text);
+      cursor: pointer;
+      transition: transform .15s ease, background .2s ease, border-color .2s ease;
     }
-    .btn.primary { background: linear-gradient(90deg, #1d4ed8, #2563eb); border-color: #1d4ed8; }
-    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-    .tile { padding: 16px; border: 1px solid #374151; border-radius: 16px; background: #0b1324; }
-    footer { text-align: center; padding: 32px 16px; opacity: 0.7; }
-    @media (max-width: 880px) { .hero { grid-template-columns: 1fr; } }
-    dialog::backdrop { background: #0008; backdrop-filter: blur(2px); }
-    dialog { border: 1px solid #374151; border-radius: 16px; background: #0b1324; color: var(--text); padding: 20px; }
+
+    .btn.primary {
+      background: linear-gradient(90deg, #1d4ed8, #2563eb);
+      border-color: #1d4ed8
+    }
+
+    .btn:hover {
+      transform: translateY(-1px)
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px
+    }
+
+    .tile {
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--card)
+    }
+
+    footer {
+      text-align: center;
+      padding: 32px 16px;
+      opacity: .7
+    }
+
+    @media (max-width:880px) {
+      .hero {
+        grid-template-columns: 1fr
+      }
+    }
+
+    dialog::backdrop {
+      background: #0008;
+      backdrop-filter: blur(2px)
+    }
+
+    dialog {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--card);
+      color: var(--text);
+      padding: 20px
+    }
   </style>
 </head>
+
 <body>
   <header>
     <div class="brand">💙 For You</div>
@@ -71,7 +217,7 @@
       <a href="#about">About</a>
       <a href="#memories">Memories</a>
       <a href="#note">Note</a>
-      <button class="btn" id="helpBtn">Help</button>
+      <button id="helpBtn">Help</button>
     </nav>
   </header>
 
@@ -80,17 +226,27 @@
       <div class="hero">
         <div>
           <h1>Hey <span class="glow">Beautiful</span> ✨</h1>
-          <p>This is a little site I made just for you. Simple, sincere, and full of love.</p>
+          <p>This is a little site I made just for you — simple, sincere, and full of love.</p>
           <div class="actions">
             <a class="btn primary" href="#memories">See memories</a>
             <button class="btn" id="randomNoteBtn">Random sweet note</button>
           </div>
         </div>
-        <img src="../images/hero.jpg" alt="A favorite photo of us" />
+
+        <div class="media">
+          <img src="images/hero.jpg" alt="A favorite photo of us"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';" />
+          <div class="ph">Add <code>docs/images/hero.jpg</code></div>
+        </div>
       </div>
 
       <div class="grid" id="memories">
-        <div class="tile"><img src="../images/us-at-the-game.jpg" alt="At the game" style="width:100%;border-radius:12px; margin-bottom:8px;"/>That time we cheered until our voices cracked.</div>
+        <div class="tile">
+          <img src="images/us-at-the-game.jpg" alt="At the game"
+            style="width:100%;border-radius:12px;border:1px solid #1f2937;margin-bottom:8px;"
+            onerror="this.replaceWith(document.createElement('div'));" />
+          That time we cheered until our voices cracked.
+        </div>
         <div class="tile">Late-night talks that stretched to sunrise.</div>
         <div class="tile">Your laugh. Always your laugh.</div>
       </div>
@@ -107,29 +263,43 @@
   <dialog id="helpModal">
     <h3>How to use this site</h3>
     <ol>
-      <li>Click <em>See memories</em> to jump to the memory grid.</li>
-      <li>Press <em>Random sweet note</em> for a surprise message.</li>
-      <li>Replace images in the <code>/images</code> folder with your own.</li>
+      <li>Put photos in <code>docs/images/</code> (same names as in the HTML or update the paths).</li>
+      <li>GitHub Pages must be set to <strong>Branch: main</strong>, <strong>Folder: /docs</strong>.</li>
+      <li>Click “Random sweet note” for a surprise.</li>
     </ol>
     <button class="btn" id="closeHelp">Close</button>
   </dialog>
 
   <script>
-    const notes = [
-      "I’m proud of the person you are.",
-      "You’re my favorite notification.",
-      "With you, even grocery runs are adventures.",
-      "You’re the best part of my day, every day.",
-      "Your smile is my screensaver—forever."
-    ];
-    const noteText = document.getElementById('noteText');
-    document.getElementById('randomNoteBtn').addEventListener('click', () => {
-      const pick = notes[Math.floor(Math.random() * notes.length)];
-      noteText.textContent = pick;
-    });
-    const helpModal = document.getElementById('helpModal');
-    document.getElementById('helpBtn').addEventListener('click', () => helpModal.showModal());
-    document.getElementById('closeHelp').addEventListener('click', () => helpModal.close());
+    (function () {
+      var notes = [
+        "I'm proud of the person you are.",
+        "You're my favorite notification.",
+        "With you, even grocery runs are adventures.",
+        "You're the best part of my day, every day.",
+        "Your smile is my screensaver—forever."
+      ];
+
+      var noteText = document.getElementById("noteText");
+      var randomBtn = document.getElementById("randomNoteBtn");
+      if (randomBtn) {
+        randomBtn.addEventListener("click", function () {
+          var pick = notes[Math.floor(Math.random() * notes.length)];
+          noteText.textContent = pick;
+        });
+      }
+
+      var helpModal = document.getElementById("helpModal");
+      var helpBtn = document.getElementById("helpBtn");
+      var closeBtn = document.getElementById("closeHelp");
+      if (helpBtn && helpModal) {
+        helpBtn.addEventListener("click", function () { helpModal.showModal(); });
+      }
+      if (closeBtn && helpModal) {
+        closeBtn.addEventListener("click", function () { helpModal.close(); });
+      }
+    })();
   </script>
 </body>
+
 </html>
