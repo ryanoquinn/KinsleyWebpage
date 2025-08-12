@@ -1,1 +1,5 @@
+git add docs/.nojekyll
+git commit -m "Add .nojekyll to disable Jekyll on GitHub Pages"
+git push origin main
+
 
