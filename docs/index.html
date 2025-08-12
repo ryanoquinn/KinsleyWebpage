@@ -310,6 +310,21 @@
       }
     })();
   </script>
+  <script>
+    (function () {
+      // Use current timestamp as a version
+      const v = Date.now();
+
+      // Bust cache for all linked CSS, JS, and images
+      document.querySelectorAll('link[rel="stylesheet"], script[src], img[src]').forEach(el => {
+        const attr = el.tagName === 'LINK' ? 'href' : 'src';
+        if (el[attr] && !el[attr].includes('?v=')) {
+          el[attr] = el[attr] + (el[attr].includes('?') ? '&' : '?') + 'v=' + v;
+        }
+      });
+    })();
+  </script>
+
 </body>
 
 </html>
