@@ -1,0 +1,6 @@
+{
+  "files.autoSave": "onFocusChange",
+  "editor.formatOnSave": true,
+  "liveServer.settings.root": "/docs",
+  "liveServer.settings.port": 5500
+}

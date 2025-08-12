@@ -1,0 +1,10 @@
+{
+  "name": "my-gf-website",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A sweet single-page site for my girlfriend, hosted on GitHub Pages.",
+  "scripts": {
+    "dev": "npx live-server --open=docs"
+  },
+  "devDependencies": {}
+}
