@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Private Video 🎬</title>
+    <meta name="description" content="A private video page with passcode." />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #0f172a;
+            --text: #e5e7eb;
+            --card: #0b1324;
+            --line: #1d283a;
+            --lineSoft: #374151;
+            --accent: #60a5fa;
+            --accent2: #f472b6;
+            --good: #34d399;
+            --bad: #ef4444;
+
+            --btn-secondary-bg: #0f1a2f;
+            --btn-secondary-brd: #22324d;
+            --btn-primary-start: #3b82f6;
+            --btn-primary-end: #2563eb;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Poppins', system-ui, Segoe UI, Roboto, Arial, sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(1200px 800px at 10% 10%, #0b1220 0%, var(--bg) 60%),
+                radial-gradient(1000px 900px at 90% 30%, #111827 0%, var(--bg) 70%);
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            inset: 0 0 auto 0;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            background: #0f172a80;
+            backdrop-filter: blur(6px);
+            border-bottom: 1px solid var(--line);
+            z-index: 20;
+        }
+
+        .brand {
+            font-weight: 600;
+            letter-spacing: .3px;
+        }
+
+        header nav a {
+            color: var(--text);
+            text-decoration: none;
+            margin-left: 16px;
+            opacity: .9;
+        }
+
+        header nav a:hover {
+            opacity: 1;
+        }
+
+        /* Layout */
+        main {
+            min-height: 100vh;
+            padding: 96px 20px 40px;
+            display: grid;
+            place-items: center;
+        }
+
+        .card {
+            width: min(100%, 900px);
+            background: linear-gradient(180deg, #111827cc, #0b1324cc);
+            border: 1px solid var(--line);
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow:
+                0 20px 60px #0008,
+                inset 0 1px 0 #334155;
+            display: grid;
+            gap: 18px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(26px, 4.5vw, 40px);
+            line-height: 1.15;
+        }
+
+        .hint {
+            opacity: .75;
+            font-size: .95rem;
+        }
+
+        .gate {
+            display: grid;
+            gap: 12px;
+        }
+
+        .passwrap {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        input[type="password"],
+        input[type="text"] {
+            background: #0f1a2f;
+            color: var(--text);
+            border: 1px solid var(--lineSoft);
+            border-radius: 12px;
+            padding: 10px 12px;
+            font-size: 1.1rem;
+            letter-spacing: 0.2em;
+            width: 140px;
+            text-align: center;
+            outline: none;
+        }
+
+        .btn {
+            padding: 10px 14px;
+            border-radius: 12px;
+            border: 1px solid var(--btn-secondary-brd);
+            background: var(--btn-secondary-bg);
+            color: var(--text);
+            text-decoration: none;
+            cursor: pointer;
+            display: inline-block;
+            letter-spacing: .2px;
+            transition: transform .15s ease, background .2s ease, border-color .2s ease, box-shadow .2s ease, opacity .2s ease;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn.primary {
+            border-color: #1e40af;
+            background: linear-gradient(135deg, var(--btn-primary-start), var(--btn-primary-end));
+            box-shadow: 0 8px 22px rgba(37, 99, 235, .25), inset 0 1px 0 rgba(255, 255, 255, .05);
+        }
+
+        .msg {
+            font-size: .95rem;
+            min-height: 1.1em;
+        }
+
+        .ok {
+            color: var(--good);
+        }
+
+        .err {
+            color: var(--bad);
+        }
+
+        .meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .count {
+            opacity: .85;
+            font-size: .95rem;
+        }
+
+        .videoWrap[hidden] {
+            display: none !important;
+        }
+
+        .gate[hidden] {
+            display: none !important;
+        }
+
+        .videoWrap video {
+            width: 100%;
+            border-radius: 16px;
+            border: 1px solid var(--lineSoft);
+            background: #000;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="brand">💙 For You</div>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="memories.html">Memories</a>
+            <a href="note.html">Note</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="card">
+            <div class="meta">
+                <h1>Private Video</h1>
+                <div class="count" id="countdown" hidden>Access expires in —</div>
+            </div>
+            <p class="hint">Enter the 4-digit passcode to view the video.</p>
+
+            <!-- Passcode gate -->
+            <div class="gate" id="gate">
+                <div class="passwrap">
+                    <input id="code" type="password" inputmode="numeric" pattern="\\d{4}" maxlength="4"
+                        placeholder="••••" aria-label="4-digit passcode" />
+                    <button class="btn primary" id="enterBtn">Enter</button>
+                    <button class="btn" id="toggleVis" aria-label="Show code">Show</button>
+                </div>
+                <div class="msg" id="gateMsg"></div>
+            </div>
+
+            <!-- Video area (hidden until code correct) -->
+            <div class="videoWrap" id="videoWrap" hidden>
+                <!-- PLACE YOUR FILE AT: docs/media/your-video.mp4 -->
+                <!-- Then update the src path below to match your filename -->
+                <video id="vid" controls playsinline preload="metadata">
+                    <source src="media/your-video.mp4" type="video/mp4">
+                    Sorry, your browser doesn’t support embedded videos.
+                </video>
+                <p class="hint">If the video doesn’t appear, make sure your file is at
+                    <code>docs/media/your-video.mp4</code> and the <code>&lt;source&gt;</code> path matches.</p>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        /*
+          Passcode gate with timer & tab-switch lock.
+          Requirements implemented:
+          - Must enter passcode on every refresh (no auto-unlock state kept).
+          - After unlocking, auto-lock after 10 minutes (600,000 ms).
+          - If user switches to another tab/app, lock immediately.
+          Code: 4532
+        */
+        const PASSCODE = "4532";
+        const LOCK_AFTER_MS = 10 * 60 * 1000; // 10 minutes
+
+        const gate = document.getElementById("gate");
+        const code = document.getElementById("code");
+        const btn = document.getElementById("enterBtn");
+        const msg = document.getElementById("gateMsg");
+        const wrap = document.getElementById("videoWrap");
+        const toggleVis = document.getElementById("toggleVis");
+        const video = document.getElementById("vid");
+        const countdownEl = document.getElementById("countdown");
+
+        let lockTimeoutId = null;
+        let tickIntervalId = null;
+        let deadline = null;
+
+        // No auto-unlock on load. Gate is shown by default.
+
+        btn.addEventListener("click", tryOpen);
+        code.addEventListener("keydown", (e) => { if (e.key === "Enter") tryOpen(); });
+
+        toggleVis.addEventListener("click", () => {
+            if (code.type === "password") {
+                code.type = "text";
+                toggleVis.textContent = "Hide";
+                toggleVis.setAttribute("aria-label", "Hide code");
+            } else {
+                code.type = "password";
+                toggleVis.textContent = "Show";
+                toggleVis.setAttribute("aria-label", "Show code");
+            }
+            code.focus();
+        });
+
+        // Lock immediately when leaving/blur/hidden
+        document.addEventListener("visibilitychange", () => {
+            if (document.hidden) {
+                lockGate("You switched tabs. Enter the code again.");
+            }
+        });
+
+        window.addEventListener("pagehide", () => {
+            // Just in case some browsers don't fire visibilitychange reliably
+            lockGate();
+        });
+
+        function tryOpen() {
+            const val = (code.value || "").trim();
+            if (val.length !== 4 || !/^\d{4}$/.test(val)) {
+                showMsg("Enter 4 digits.", true);
+                code.focus();
+                return;
+            }
+            if (val === PASSCODE) {
+                showVideo();
+                showMsg("Access granted.", false);
+                startTimer();
+            } else {
+                showMsg("Incorrect code. Try again.", true);
+                code.select();
+            }
+        }
+
+        function showVideo() {
+            gate.hidden = true;
+            wrap.hidden = false;
+            // Optional: cache-bust the video source on each unlock to avoid stale CDN cache
+            const src = document.querySelector("video source");
+            if (src) {
+                const base = src.src.split("?")[0];
+                src.src = base + "?v=" + Date.now();
+                try { video.load(); } catch (e) { }
+            }
+            code.value = "";
+            countdownEl.hidden = false;
+        }
+
+        function lockGate(reason) {
+            // Pause and hide video
+            try { video.pause(); } catch (e) { }
+            wrap.hidden = true;
+            gate.hidden = false;
+
+            // Clear timers
+            if (lockTimeoutId) clearTimeout(lockTimeoutId);
+            if (tickIntervalId) clearInterval(tickIntervalId);
+            lockTimeoutId = null;
+            tickIntervalId = null;
+            deadline = null;
+
+            // Reset UI
+            countdownEl.hidden = true;
+            countdownEl.textContent = "Access expires in —";
+            if (reason) showMsg(reason, true); else showMsg("", false);
+            code.focus();
+        }
+
+        function startTimer() {
+            // Clear any previous
+            if (lockTimeoutId) clearTimeout(lockTimeoutId);
+            if (tickIntervalId) clearInterval(tickIntervalId);
+
+            deadline = Date.now() + LOCK_AFTER_MS;
+
+            // Auto-lock when time is up
+            lockTimeoutId = setTimeout(() => lockGate("Time expired. Please enter the code again."), LOCK_AFTER_MS);
+
+            // Show countdown
+            updateCountdown();
+            tickIntervalId = setInterval(updateCountdown, 1000);
+        }
+
+        function updateCountdown() {
+            if (!deadline) return;
+            const msLeft = Math.max(0, deadline - Date.now());
+            const mm = String(Math.floor(msLeft / 60000)).padStart(2, "0");
+            const ss = String(Math.floor((msLeft % 60000) / 1000)).padStart(2, "0");
+            countdownEl.textContent = `Access expires in ${mm}:${ss}`;
+        }
+
+        function showMsg(text, isErr) {
+            msg.textContent = text;
+            msg.className = "msg " + (isErr ? "err" : "ok");
+        }
+    </script>
+</body>
+
+</html>

@@ -39,6 +39,7 @@
             background:
                 radial-gradient(1200px 800px at 10% 10%, #0b1220 0%, var(--bg) 60%),
                 radial-gradient(1000px 900px at 90% 30%, #111827 0%, var(--bg) 70%);
+            overflow-x: hidden;
         }
 
         /* Header (matches index) */
@@ -53,7 +54,7 @@
             background: #0f172a80;
             backdrop-filter: blur(6px);
             border-bottom: 1px solid var(--line);
-            z-index: 10;
+            z-index: 20;
         }
 
         .brand {
@@ -65,7 +66,7 @@
         header nav button {
             color: var(--text);
             text-decoration: none;
-            /* no underline in header */
+            /* no underline */
             margin-left: 16px;
             opacity: .9;
             background: none;
@@ -79,17 +80,44 @@
             opacity: 1;
         }
 
+        /* Page entrance: dramatic sweep */
+        .enterFX {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(1200px 800px at 50% 50%, #60a5fa55, transparent 60%);
+            animation: enterSweep 900ms ease forwards;
+            pointer-events: none;
+            z-index: 15;
+        }
+
+        @keyframes enterSweep {
+            0% {
+                opacity: 0;
+                transform: scale(1.1);
+                filter: blur(4px);
+            }
+
+            20% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+                transform: scale(1);
+                filter: blur(0px);
+            }
+        }
+
         /* Layout */
         main {
             min-height: 100vh;
             padding: 96px 20px 40px;
-            /* room for fixed header */
             display: grid;
             place-items: center;
         }
 
         .card {
-            width: min(100%, 1100px);
+            width: min(100%, 1200px);
             background: linear-gradient(180deg, #111827cc, #0b1324cc);
             border: 1px solid var(--line);
             border-radius: 24px;
@@ -120,7 +148,7 @@
             font-size: .95rem;
         }
 
-        /* Buttons (match index, no underline) */
+        /* Buttons */
         .actions {
             display: flex;
             gap: 12px;
@@ -134,7 +162,7 @@
             background: var(--card);
             color: var(--text);
             text-decoration: none;
-            /* keep links clean */
+            /* clean links */
             cursor: pointer;
             transition: transform .15s ease, background .2s ease, border-color .2s ease, opacity .2s ease;
             display: inline-block;
@@ -149,45 +177,71 @@
             transform: translateY(-1px);
         }
 
-        /* Gallery */
+        /* Gallery — larger images */
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 14px;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            /* larger tiles */
+            gap: 18px;
         }
 
         .tile {
-            position: relative;
             border: 1px solid var(--lineSoft);
             border-radius: 16px;
             overflow: hidden;
             background: var(--card);
             display: grid;
+            grid-template-rows: auto auto;
+        }
+
+        .tile .imgwrap {
+            background: #0b1426;
+            display: grid;
+            place-items: center;
         }
 
         .tile img {
             width: 100%;
-            height: 100%;
+            height: auto;
             display: block;
             object-fit: cover;
-            aspect-ratio: 4 / 3;
+            aspect-ratio: 3 / 2;
+            /* taller/bigger view */
+            transition: transform .25s ease, opacity .25s ease;
+            cursor: zoom-in;
+            border-bottom: 1px solid var(--lineSoft);
+        }
+
+        .tile:hover img {
+            transform: scale(1.02);
         }
 
         .cap {
-            position: absolute;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            padding: 8px 10px;
-            font-size: .92rem;
-            background: linear-gradient(180deg, #0000, #000b);
+            padding: 12px 14px;
+            font-size: 1rem;
+            opacity: .95;
         }
 
-        /* Lightbox */
+        /* Placeholder if image missing */
+        .ph-tile {
+            width: 100%;
+            aspect-ratio: 3 / 2;
+            display: grid;
+            place-items: center;
+            border-bottom: 1px solid var(--lineSoft);
+            background:
+                repeating-linear-gradient(45deg, #0e1a33, #0e1a33 12px, #122042 12px, #122042 24px);
+            color: #cbd5e1;
+            font-weight: 600;
+            text-align: center;
+            padding: 8px;
+        }
+
+        /* Lightbox (read-only caption) */
         .lightbox {
             position: fixed;
             inset: 0;
-            background: #000c;
+            background: #000d;
             display: none;
             place-items: center;
             z-index: 50;
@@ -197,62 +251,57 @@
             display: grid;
         }
 
-        .lb-content {
-            position: relative;
-            max-width: 92vw;
-            max-height: 86vh;
-        }
-
-        .lb-content img {
-            max-width: 100%;
-            max-height: 86vh;
-            display: block;
-            border-radius: 12px;
+        .lb-shell {
+            width: min(100%, 1100px);
+            max-height: 90vh;
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            gap: 12px;
+            background: var(--card);
             border: 1px solid #334155;
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 30px 80px #000a;
         }
 
-        .lb-close,
-        .lb-prev,
-        .lb-next {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
+        .lb-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .iconbtn {
             background: var(--card);
             color: var(--text);
             border: 1px solid #334155;
-            padding: 8px 10px;
+            padding: 8px 12px;
             border-radius: 10px;
             cursor: pointer;
-            opacity: .9;
+            opacity: .95;
         }
 
-        .lb-close {
-            top: -46px;
-            right: 0;
-            transform: none;
+        .lb-image-wrap {
+            display: grid;
+            place-items: center;
+            max-height: 64vh;
+            overflow: hidden;
+            border-radius: 12px;
+            border: 1px solid #334155;
+            background: #0b1426;
         }
 
-        .lb-prev {
-            left: -52px;
+        .lb-image-wrap img {
+            max-width: 100%;
+            max-height: 64vh;
+            display: block;
+            border-radius: 12px;
         }
 
-        .lb-next {
-            right: -52px;
-        }
-
-        @media (max-width: 720px) {
-            .lb-prev {
-                left: 6px;
-            }
-
-            .lb-next {
-                right: 6px;
-            }
-
-            .lb-close {
-                top: 8px;
-                right: 8px;
-            }
+        .lb-caption {
+            padding: 8px 4px 0;
+            font-size: 1rem;
+            opacity: .95;
         }
 
         footer {
@@ -264,6 +313,9 @@
 </head>
 
 <body>
+    <!-- Page-load dramatic effect -->
+    <div class="enterFX"></div>
+
     <header>
         <div class="brand">💙 For You</div>
         <nav>
@@ -282,8 +334,9 @@
                 </div>
             </div>
 
-            <p class="hint">Add JPG/PNG images to <code>docs/images/memories/</code>, then list file names in the
-                <code>PHOTOS</code> array below. Optional captions can go in <code>CAPTIONS</code>.
+            <p class="hint">
+                Put JPG/PNG images in <code>docs/images/memories/</code>. Then edit the list below to set the filename
+                and the permanent message shown under each photo.
             </p>
 
             <section class="grid" id="gallery"></section>
@@ -294,37 +347,90 @@
         More moments coming soon. 💙
     </footer>
 
-    <!-- Lightbox -->
+    <!-- Lightbox (read-only) -->
     <div class="lightbox" id="lightbox" aria-hidden="true">
-        <div class="lb-content">
-            <img id="lbImg" alt="Memory">
-            <button class="lb-close" id="lbClose" aria-label="Close">✕</button>
-            <button class="lb-prev" id="lbPrev" aria-label="Previous">‹</button>
-            <button class="lb-next" id="lbNext" aria-label="Next">›</button>
+        <div class="lb-shell">
+            <div class="lb-controls">
+                <button class="iconbtn" id="lbPrev" aria-label="Previous">‹ Prev</button>
+                <button class="iconbtn" id="lbClose" aria-label="Close">✕ Close</button>
+                <button class="iconbtn" id="lbNext" aria-label="Next">Next ›</button>
+            </div>
+
+            <div class="lb-image-wrap">
+                <img id="lbImg" alt="Memory">
+            </div>
+
+            <div class="lb-caption" id="lbCaption"></div>
         </div>
     </div>
 
     <script>
-        // ✅ 1) List your photo files here (just the file names)
-        // Put the actual image files in: docs/images/memories/
-        const PHOTOS = [
-            "hero.jpg",
-            "us-at-the-game.jpg",
-            // Add more like: "beach-day.png", "hike-1.jpg", "date-night.jpg", ...
+        /*
+          HOW TO USE:
+          - Put files in docs/images/memories/
+          - Update the FILES array below with {file, caption}
+          - Captions are permanent (they live in this HTML)
+          - hero.jpg and photo-15..photo-21 have been removed as requested
+        */
+        const BASE = "images/memories/";
+        const FILES = [
+            { file: "us-at-the-game.jpg", caption: "Game day energy, laughing until our voices disappeared." },
+
+            /* --- Keep / replace these with your real files & messages --- */
+            { file: "photo-01.jpg", caption: "Sunset glow and silly smiles." },
+            { file: "photo-02.jpg", caption: "Coffee, quiet, and your laugh." },
+            { file: "photo-03.jpg", caption: "That walk where time slowed down." },
+            { file: "photo-04.jpg", caption: "Rainy day, cozy hearts." },
+            { file: "photo-05.jpg", caption: "The world felt small. We felt big." },
+            { file: "photo-06.jpg", caption: "Road trip playlists and windows down." },
+            { file: "photo-07.jpg", caption: "The moment I knew we were home." },
+            { file: "photo-08.jpg", caption: "Pizza night, perfect chaos." },
+            { file: "photo-09.jpg", caption: "We danced in the kitchen." },
+            { file: "photo-10.jpg", caption: "Your hand found mine. It stayed." },
+            { file: "photo-11.jpg", caption: "A day made of light and laughter." },
+            { file: "photo-12.jpg", caption: "Every little look said everything." },
+            { file: "photo-13.jpg", caption: "That view had nothing on you." },
+            { file: "photo-14.jpg", caption: "Giggles, freckles, and sunshine." }
+            /* Removed: photo-15.jpg .. photo-21.jpg */
         ];
 
-        // (Optional) 2) Add short captions by file name
-        const CAPTIONS = {
-            "hero.jpg": "A favorite photo of us",
-            "us-at-the-game.jpg": "Game day energy",
-            // "date-night.jpg": "Our perfect date night",
-        };
-
-        // ✅ 3) No changes needed below this line
-        const BASE = "images/memories/";
+        // Build gallery with big images and permanent captions
         const gallery = document.getElementById("gallery");
+        FILES.forEach(({ file, caption }, i) => {
+            const tile = document.createElement("figure");
+            tile.className = "tile";
+
+            const imgwrap = document.createElement("div");
+            imgwrap.className = "imgwrap";
+
+            const img = new Image();
+            img.loading = "lazy";
+            img.decoding = "async";
+            img.alt = caption || "Memory";
+            img.src = BASE + file + cacheBust();
+            img.addEventListener("click", () => openLB(i));
+            img.onerror = () => {
+                const ph = document.createElement("div");
+                ph.className = "ph-tile";
+                ph.innerHTML = `<div>Missing: <code>${file}</code><br/>Drop this image in <code>docs/images/memories/</code></div>`;
+                imgwrap.replaceChildren(ph);
+            };
+
+            imgwrap.appendChild(img);
+            tile.appendChild(imgwrap);
+
+            const cap = document.createElement("figcaption");
+            cap.className = "cap";
+            cap.textContent = caption || "";
+            tile.appendChild(cap);
+
+            gallery.appendChild(tile);
+        });
+
+        // Lightbox (read-only caption)
         const lb = document.getElementById("lightbox");
         const lbImg = document.getElementById("lbImg");
+        const lbCaption = document.getElementById("lbCaption");
         const lbClose = document.getElementById("lbClose");
         const lbPrev = document.getElementById("lbPrev");
         const lbNext = document.getElementById("lbNext");
@@ -332,7 +438,13 @@
 
         function openLB(i) {
             current = i;
-            lbImg.src = BASE + PHOTOS[i] + cacheBust();
+            const { file, caption } = FILES[i];
+            lbImg.src = BASE + file + cacheBust();
+            lbImg.onerror = () => {
+                lbImg.removeAttribute("src");
+                lbImg.alt = "Image not found";
+            };
+            lbCaption.textContent = caption || "";
             lb.classList.add("open");
             lb.setAttribute("aria-hidden", "false");
         }
@@ -341,31 +453,9 @@
             lb.setAttribute("aria-hidden", "true");
             lbImg.removeAttribute("src");
         }
-        function prev() { openLB((current - 1 + PHOTOS.length) % PHOTOS.length); }
-        function next() { openLB((current + 1) % PHOTOS.length); }
+        function prev() { openLB((current - 1 + FILES.length) % FILES.length); }
+        function next() { openLB((current + 1) % FILES.length); }
 
-        // Build gallery
-        PHOTOS.forEach((file, i) => {
-            const tile = document.createElement("figure");
-            tile.className = "tile";
-
-            const img = new Image();
-            img.loading = "lazy";
-            img.decoding = "async";
-            img.alt = CAPTIONS[file] || "Memory";
-            img.src = BASE + file + cacheBust();
-            img.addEventListener("click", () => openLB(i));
-            tile.appendChild(img);
-
-            const cap = document.createElement("figcaption");
-            cap.className = "cap";
-            cap.textContent = CAPTIONS[file] || "";
-            tile.appendChild(cap);
-
-            gallery.appendChild(tile);
-        });
-
-        // Lightbox controls
         lbClose.addEventListener("click", closeLB);
         lbPrev.addEventListener("click", prev);
         lbNext.addEventListener("click", next);
@@ -377,7 +467,7 @@
             if (e.key === "ArrowRight") next();
         });
 
-        // Small cache-buster, same idea as index
+        // Cache-buster so new uploads show right away
         function cacheBust() {
             const v = sessionStorage.getItem("img_v") || Date.now();
             sessionStorage.setItem("img_v", v);

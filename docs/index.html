@@ -17,10 +17,20 @@
       --bg: #0f172a;
       --text: #e5e7eb;
       --card: #0b1324;
-      --line: #1f2937;
+      --line: #1d283a;
       --lineSoft: #374151;
       --accent: #60a5fa;
       --accent2: #f472b6;
+
+      /* Button palette */
+      --btn-primary-start: #3b82f6;
+      /* blue-500 */
+      --btn-primary-end: #2563eb;
+      /* blue-600 */
+      --btn-secondary-bg: #0f1a2f;
+      /* sleek dark */
+      --btn-secondary-brd: #22324d;
+      --btn-hover-raise: -1px;
     }
 
     * {
@@ -39,6 +49,7 @@
       background:
         radial-gradient(1200px 800px at 10% 10%, #0b1220 0%, var(--bg) 60%),
         radial-gradient(1000px 900px at 90% 30%, #111827 0%, var(--bg) 70%);
+      overflow-x: hidden;
     }
 
     /* Header */
@@ -53,7 +64,7 @@
       background: #0f172a80;
       backdrop-filter: blur(6px);
       border-bottom: 1px solid var(--line);
-      z-index: 10;
+      z-index: 20;
     }
 
     .brand {
@@ -65,7 +76,7 @@
     header nav button {
       color: var(--text);
       text-decoration: none;
-      /* no underline in header */
+      /* no underline */
       margin-left: 16px;
       opacity: .9;
       background: none;
@@ -79,11 +90,41 @@
       opacity: 1;
     }
 
+    /* Dramatic pre-navigation overlay (used before going to Memories or Video) */
+    .fx-overlay {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0;
+      transform: scale(1.05);
+      z-index: 200;
+    }
+
+    .fx-overlay.show {
+      animation: sweep 600ms ease forwards;
+      background: radial-gradient(200px 200px at 50% 50%, #60a5fa55, #0000 40%);
+    }
+
+    @keyframes sweep {
+      0% {
+        opacity: 0;
+        transform: scale(1.05);
+      }
+
+      30% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: 0;
+        transform: scale(1);
+      }
+    }
+
     /* Layout */
     main {
       min-height: 100vh;
       padding: 96px 20px 40px;
-      /* room below fixed header */
       display: grid;
       place-items: center;
     }
@@ -126,7 +167,7 @@
     .ph {
       display: none;
       width: 100%;
-      aspect-ratio: 4/3;
+      aspect-ratio: 4 / 3;
       border-radius: 18px;
       border: 1px solid var(--lineSoft);
       background:
@@ -156,38 +197,60 @@
       opacity: .9;
     }
 
-    /* Buttons */
+    /* Buttons — sleek + professional */
     .actions {
       display: flex;
-      gap: 12px;
+      gap: 14px;
       flex-wrap: wrap;
-      margin-top: 10px;
+      margin-top: 12px;
     }
 
+    .actions.actions-row-2 {
+      margin-top: 16px;
+    }
+
+    /* extra spacing between rows */
+
     .btn {
-      padding: 12px 16px;
+      padding: 12px 18px;
       border-radius: 12px;
-      border: 1px solid var(--lineSoft);
-      background: var(--card);
+      border: 1px solid var(--btn-secondary-brd);
+      background: var(--btn-secondary-bg);
       color: var(--text);
       text-decoration: none;
-      /* no underline on button links */
+      /* no underline */
       cursor: pointer;
+      display: inline-block;
+      letter-spacing: .2px;
       transition:
         transform .15s ease,
         background .2s ease,
         border-color .2s ease,
+        box-shadow .2s ease,
         opacity .2s ease;
-      display: inline-block;
-    }
-
-    .btn.primary {
-      background: linear-gradient(90deg, #1d4ed8, #2563eb);
-      border-color: #1d4ed8;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
     }
 
     .btn:hover {
-      transform: translateY(-1px);
+      transform: translateY(var(--btn-hover-raise));
+    }
+
+    .btn:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .btn.primary {
+      border-color: #1e40af;
+      background: linear-gradient(135deg, var(--btn-primary-start), var(--btn-primary-end));
+      box-shadow:
+        0 8px 22px rgba(37, 99, 235, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    }
+
+    .btn.primary:hover {
+      filter: brightness(1.03);
+      transform: translateY(var(--btn-hover-raise));
     }
 
     /* Grid preview */
@@ -223,30 +286,17 @@
         grid-template-columns: 1fr;
       }
     }
-
-    /* Modal */
-    dialog::backdrop {
-      background: #0008;
-      backdrop-filter: blur(2px);
-    }
-
-    dialog {
-      border: 1px solid var(--lineSoft);
-      border-radius: 16px;
-      background: var(--card);
-      color: var(--text);
-      padding: 20px;
-      max-width: 560px;
-    }
   </style>
 </head>
 
 <body>
+  <div class="fx-overlay" id="fx"></div>
+
   <header>
     <div class="brand">💙 For You</div>
     <nav>
       <a href="index.html">Home</a>
-      <a href="memories.html">Memories</a>
+      <a href="memories.html" id="memoriesLink">Memories</a>
       <a href="note.html">Note</a>
       <button id="helpBtn">Help</button>
     </nav>
@@ -256,42 +306,44 @@
     <section class="card" id="about">
       <div class="hero">
         <div>
-          <!-- Title -->
           <h1>Hey <span class="glow">Kinsley</span> ✨</h1>
           <p>This is a little site I made just for you — simple, sincere, and full of love.</p>
 
-          <!-- Actions -->
+          <!-- Row 1 buttons -->
           <div class="actions">
-            <a class="btn primary" href="memories.html">See memories</a>
+            <a class="btn primary" href="memories.html" id="memoriesBtn">See memories</a>
             <a class="btn" href="note.html">Read Me</a>
+          </div>
+
+          <!-- Row 2: Video button -->
+          <div class="actions actions-row-2">
+            <a class="btn" href="video.html" id="videoBtn">Click here to watch video</a>
           </div>
         </div>
 
-        <!-- Hero image -->
-        <!-- Place the image at docs/images/hero.jpg (or change the filename below) -->
         <div class="media">
+          <!-- If your hero image lives in docs/images/memories/, change to images/memories/hero.jpg -->
           <img src="images/hero.jpg" alt="A favorite photo of us"
             onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';" />
           <div class="ph">Add <code>docs/images/hero.jpg</code></div>
         </div>
       </div>
 
-      <!-- Front-page preview tiles -->
-      <!-- To add an image: drop a file in docs/images/, then update the src below -->
       <div class="grid" id="memories">
         <div class="tile">
-          <img src="images/us-at-the-game.jpg" alt="At the game"
+          <img src="images/memories/hero.jpg" alt="At the game"
             onerror="this.replaceWith(document.createElement('div'));" />
           <div class="caption">That time we cheered until our voices cracked.</div>
         </div>
 
         <div class="tile">
-          <img src="images/beach-day.jpg" alt="Beach day" onerror="this.replaceWith(document.createElement('div'));" />
+          <img src="images/memories/beach-day.jpg" alt="Beach day"
+            onerror="this.replaceWith(document.createElement('div'));" />
           <div class="caption">That sunny beach day.</div>
         </div>
 
         <div class="tile">
-          <img src="images/date-night.jpg" alt="Date night"
+          <img src="images/memories/date-night.jpg" alt="Date night"
             onerror="this.replaceWith(document.createElement('div'));" />
           <div class="caption">Our perfect date night.</div>
         </div>
@@ -300,37 +352,46 @@
   </main>
 
   <footer>
-    Made with 💙 and a ridiculous grin.
+    I made this with a bittersweet heart.
   </footer>
 
   <!-- Help modal -->
   <dialog id="helpModal">
     <h3>How to use this site</h3>
     <ol>
-      <li>Put photos in <code>docs/images/</code> (same names as in the HTML or update the paths).</li>
-      <li>GitHub Pages should serve from <strong>Branch: main</strong>, <strong>Folder: /docs</strong>.</li>
+      <li>Put photos in <code>docs/images/</code> (or <code>docs/images/memories/</code> for gallery).</li>
+      <li>GitHub Pages: <strong>Branch:</strong> main, <strong>Folder:</strong> /docs.</li>
       <li>Click “Read Me” to open your dedicated message page.</li>
     </ol>
     <button class="btn" id="closeHelp">Close</button>
   </dialog>
 
   <script>
-    // Help modal wiring
+    // Help modal
     (function () {
       var helpModal = document.getElementById("helpModal");
       var helpBtn = document.getElementById("helpBtn");
       var closeBtn = document.getElementById("closeHelp");
-
-      if (helpBtn && helpModal) {
-        helpBtn.addEventListener("click", function () { helpModal.showModal(); });
-      }
-      if (closeBtn && helpModal) {
-        closeBtn.addEventListener("click", function () { helpModal.close(); });
-      }
+      if (helpBtn && helpModal) helpBtn.addEventListener("click", () => helpModal.showModal());
+      if (closeBtn && helpModal) closeBtn.addEventListener("click", () => helpModal.close());
     })();
-  </script>
 
-  <script>
+    // Dramatic effect before navigating to Memories or Video
+    (function () {
+      const fx = document.getElementById('fx');
+      function goWithEffect(e, href) {
+        e.preventDefault();
+        fx.classList.add('show');
+        setTimeout(() => { window.location.href = href; }, 450);
+      }
+      const memLink = document.getElementById('memoriesLink');
+      const memBtn = document.getElementById('memoriesBtn');
+      const videoBtn = document.getElementById('videoBtn');
+      if (memLink) memLink.addEventListener('click', (e) => goWithEffect(e, 'memories.html'));
+      if (memBtn) memBtn.addEventListener('click', (e) => goWithEffect(e, 'memories.html'));
+      if (videoBtn) videoBtn.addEventListener('click', (e) => goWithEffect(e, 'video.html'));
+    })();
+
     // Light cache-busting for assets (images, scripts, styles)
     (function () {
       const v = Date.now();
