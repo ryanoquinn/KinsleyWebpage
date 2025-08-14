@@ -273,6 +273,72 @@
       opacity: .9;
     }
 
+    /* Anniversary countdown */
+    .anniv {
+      margin-top: 10px;
+      border: 1px solid var(--lineSoft);
+      background: linear-gradient(180deg, #0e1528, #0b1324);
+      border-radius: 16px;
+      padding: 14px 16px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .anniv-top {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .anniv-title {
+      font-weight: 600;
+      letter-spacing: .3px;
+      opacity: .95;
+    }
+
+    .anniv-sub {
+      opacity: .75;
+      font-size: .95rem;
+    }
+
+    .anniv-timer {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .anniv-timer .chunk {
+      display: grid;
+      place-items: center;
+      min-width: 78px;
+      padding: 8px 10px;
+      border: 1px solid #2b3a57;
+      background: #0f1a2f;
+      border-radius: 12px;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .03);
+    }
+
+    .anniv-timer .num {
+      font-size: 28px;
+      font-weight: 600;
+      line-height: 1;
+    }
+
+    .anniv-timer .lbl {
+      font-size: .8rem;
+      opacity: .8;
+    }
+
+    /* Confetti canvas */
+    .confetti {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 300;
+    }
+
     /* Footer */
     footer {
       text-align: center;
@@ -318,6 +384,33 @@
           <!-- Row 2: Video button -->
           <div class="actions actions-row-2">
             <a class="btn" href="video.html" id="videoBtn">Click here to watch video</a>
+          </div>
+
+          <!-- Anniversary countdown -->
+          <div class="anniv" id="annivBox" aria-live="polite">
+            <div class="anniv-top">
+              <div class="anniv-title">Our Monthly Anniversary</div>
+              <div class="anniv-sub">Every month on the <strong>14th</strong></div>
+            </div>
+            <div class="anniv-timer" id="annivTimer" role="timer" aria-label="Countdown to next anniversary">
+              <div class="chunk">
+                <div class="num" id="aDays">00</div>
+                <div class="lbl">days</div>
+              </div>
+              <div class="chunk">
+                <div class="num" id="aHours">00</div>
+                <div class="lbl">hours</div>
+              </div>
+              <div class="chunk">
+                <div class="num" id="aMins">00</div>
+                <div class="lbl">mins</div>
+              </div>
+              <div class="chunk">
+                <div class="num" id="aSecs">00</div>
+                <div class="lbl">secs</div>
+              </div>
+            </div>
+            <div class="anniv-sub" id="annivNote"></div>
           </div>
         </div>
 
@@ -401,6 +494,144 @@
           el.setAttribute(attr, el[attr] + (el[attr].includes('?') ? '&' : '?') + 'v=' + v);
         }
       });
+    })();
+
+    // ===== Anniversary Countdown & Confetti =====
+    (function () {
+      const $ = (id) => document.getElementById(id);
+      const dEl = $('aDays'), hEl = $('aHours'), mEl = $('aMins'), sEl = $('aSecs');
+      const noteEl = $('annivNote');
+      const timerEl = $('annivTimer');
+
+      function nextFourteenth(now) {
+        const y = now.getFullYear();
+        const m = now.getMonth(); // 0-11
+        const todayIs14 = now.getDate() === 14;
+        if (todayIs14) return null; // today is anniversary day
+        if (now.getDate() < 14) return new Date(y, m, 14, 0, 0, 0, 0);
+        return new Date(y, m + 1, 14, 0, 0, 0, 0);
+      }
+
+      function pad(n) { return String(n).padStart(2, '0'); }
+
+      function tick() {
+        const now = new Date();
+        // If it's the 14th, celebrate and stop countdown
+        if (now.getDate() === 14) {
+          timerEl.style.display = 'none';
+          noteEl.innerHTML = "Happy Anniversary! 💙";
+          maybeConfettiOncePerDay();
+          return; // keep note visible; no interval clear so it can re-check next day on refresh
+        }
+
+        const target = nextFourteenth(now);
+        if (!target) return;
+
+        let diff = target - now;
+        if (diff < 0) diff = 0;
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const mins = Math.floor((diff / (1000 * 60)) % 60);
+        const secs = Math.floor((diff / 1000) % 60);
+
+        dEl.textContent = pad(days);
+        hEl.textContent = pad(hours);
+        mEl.textContent = pad(mins);
+        sEl.textContent = pad(secs);
+
+        const monthName = target.toLocaleString(undefined, { month: 'long' });
+        noteEl.textContent = `Counting down to ${monthName} 14.`;
+        timerEl.style.display = 'flex';
+      }
+
+      // Fire confetti only once per anniversary day (per browser/day)
+      function maybeConfettiOncePerDay() {
+        const now = new Date();
+        const key = `confettiFired-${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-14`;
+        if (sessionStorage.getItem(key) === 'yes') return;
+        sessionStorage.setItem(key, 'yes');
+        shootConfetti(260, 4200);
+      }
+
+      // Minimal canvas confetti (no libs)
+      function shootConfetti(count = 220, duration = 4000) {
+        const cvs = document.createElement('canvas');
+        cvs.className = 'confetti';
+        document.body.appendChild(cvs);
+        const ctx = cvs.getContext('2d');
+        let w, h, t0;
+
+        const colors = ['#60a5fa', '#f472b6', '#34d399', '#f59e0b', '#a78bfa', '#f87171', '#22d3ee'];
+        const pieces = [];
+        function resize() {
+          w = cvs.width = window.innerWidth;
+          h = cvs.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        for (let i = 0; i < count; i++) {
+          pieces.push({
+            x: Math.random() * w,
+            y: -20 - Math.random() * h * 0.4,
+            r: 4 + Math.random() * 6,
+            c: colors[Math.floor(Math.random() * colors.length)],
+            vx: -2 + Math.random() * 4,
+            vy: 2 + Math.random() * 3,
+            rot: Math.random() * Math.PI,
+            vr: (-0.2 + Math.random() * 0.4),
+            shape: Math.random() < 0.5 ? 'rect' : 'circ'
+          });
+        }
+
+        function drawPiece(p) {
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.rot);
+          ctx.fillStyle = p.c;
+          if (p.shape === 'rect') {
+            ctx.fillRect(-p.r, -p.r, p.r * 2, p.r * 2 * (0.6 + Math.random() * 0.4));
+          } else {
+            ctx.beginPath();
+            ctx.arc(0, 0, p.r, 0, Math.PI * 2);
+            ctx.fill();
+          }
+          ctx.restore();
+        }
+
+        function step(ts) {
+          if (!t0) t0 = ts;
+          const dt = Math.min(32, ts - t0); // clamp dt
+          t0 = ts;
+
+          ctx.clearRect(0, 0, w, h);
+          pieces.forEach(p => {
+            p.vy += 0.06;        // gravity
+            p.x += p.vx;
+            p.y += p.vy;
+            p.rot += p.vr;
+            // wrap horizontally
+            if (p.x < -20) p.x = w + 20;
+            if (p.x > w + 20) p.x = -20;
+            drawPiece(p);
+          });
+
+          if (ts - (t0 - dt) < duration) {
+            requestAnimationFrame(step);
+          } else {
+            // fade out and cleanup
+            setTimeout(() => {
+              cvs.remove();
+              window.removeEventListener('resize', resize);
+            }, 300);
+          }
+        }
+        requestAnimationFrame(step);
+      }
+
+      // Start countdown loop
+      tick();
+      setInterval(tick, 1000);
     })();
   </script>
 </body>
