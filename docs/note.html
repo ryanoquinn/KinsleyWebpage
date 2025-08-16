@@ -4,10 +4,28 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>A Sweet Note 💙</title>
+    <title>A letter to You 💙</title>
+
+    <!-- Accessibility & theming -->
+    <meta name="color-scheme" content="dark light">
+
+    <!-- Social share niceties -->
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💙</text></svg>">
+    <meta property="og:title" content="A letter to You 💙" />
+    <meta property="og:description" content="A letter for Kinsley." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://example.com/cover.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Body font -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Handwritten signature font -->
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+
     <style>
         :root {
             --bg: #0f172a;
@@ -15,6 +33,16 @@
             --card: #0b1324;
             --line: #374151;
             --accent: #60a5fa;
+            --accent-2: #93c5fd;
+            --pink: #f472b6;
+            --lav: #c4b5fd;
+            --gold: #fde68a;
+        }
+
+        *:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+            border-radius: 6px;
         }
 
         body {
@@ -27,14 +55,48 @@
             grid-template-rows: auto 1fr;
         }
 
+        /* Subtle scroll progress bar */
+        #progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            width: 0%;
+            background: linear-gradient(90deg, var(--accent), var(--accent-2));
+            z-index: 9999;
+            box-shadow: 0 0 8px rgba(96, 165, 250, .6);
+        }
+
         header {
-            padding: 20px;
+            padding: 16px 20px;
             background: #0f172a80;
             border-bottom: 1px solid #1f2937;
             backdrop-filter: blur(6px);
             display: flex;
+            gap: 12px;
             justify-content: space-between;
             align-items: center;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn {
+            background: var(--accent);
+            color: #0b1324;
+            border: 0;
+            padding: .5rem .9rem;
+            border-radius: .6rem;
+            cursor: pointer;
+            font: inherit;
+            transition: transform .06s ease;
+        }
+
+        .btn:active {
+            transform: translateY(1px);
         }
 
         main {
@@ -52,6 +114,29 @@
             padding: 28px;
             line-height: 1.7;
             font-size: 1.15rem;
+            /* Preserve your tabs/newlines/spaces */
+            white-space: pre-wrap;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .35);
+            animation: rise 400ms ease-out both;
+        }
+
+        @keyframes rise {
+            from {
+                transform: translateY(6px);
+                opacity: .98;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .divider {
+            margin: 1rem 0 1.2rem;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #274060, transparent);
+            border: 0;
         }
 
         a {
@@ -59,46 +144,468 @@
             text-decoration: none;
         }
 
-        /* Animation */
+        /* Word-by-word animation */
         .word {
             opacity: 0;
             display: inline;
-            animation: fadeIn 0.3s forwards;
+            will-change: opacity, transform;
+            animation: fadeIn 0.35s ease forwards;
         }
 
         @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(0.2em);
+            }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
+
+        /* Gentle emphasis for first "I love you" */
+        .love {
+            display: inline-block;
+            animation: heartbeat 1.2s ease-in-out 2;
+        }
+
+        @keyframes heartbeat {
+            0% {
+                transform: scale(1);
+            }
+
+            15% {
+                transform: scale(1.15);
+            }
+
+            30% {
+                transform: scale(1);
+            }
+
+            45% {
+                transform: scale(1.15);
+            }
+
+            60% {
+                transform: scale(1);
+            }
+        }
+
+        /* Signature style */
+        .signature {
+            display: block;
+            margin-top: 0.75rem;
+            font-family: 'Great Vibes', cursive;
+            font-size: 2rem;
+            letter-spacing: .5px;
+            color: #f3f4f6;
+        }
+
+        /* Surprise button wrapper */
+        .surprise-wrap {
+            max-width: 800px;
+            width: 100%;
+            display: grid;
+            place-items: center;
+            margin: 12px 0 24px;
+        }
+
+        .surprise-btn {
+            background: linear-gradient(90deg, var(--pink), var(--accent));
+            color: #0b1324;
+            border: 0;
+            padding: .7rem 1rem;
+            border-radius: .8rem;
+            cursor: pointer;
+            font: inherit;
+            font-weight: 600;
+            box-shadow: 0 6px 18px rgba(96, 165, 250, .25);
+            transition: transform .08s ease, filter .2s ease;
+        }
+
+        .surprise-btn:hover {
+            filter: brightness(1.08);
+        }
+
+        .surprise-btn:active {
+            transform: translateY(1px) scale(.99);
+        }
+
+        /* Magic overlay for confetti/hearts/sparkles */
+        .magic-layer {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 9998;
+        }
+
+        .confetti,
+        .heart,
+        .sparkle {
+            position: absolute;
+            will-change: transform, opacity;
+        }
+
+        /* Confetti rectangles */
+        .confetti {
+            width: 8px;
+            height: 14px;
+            opacity: 0;
+            border-radius: 2px;
+            animation: confetti-fall linear forwards;
+        }
+
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(0) translateX(0) rotate(0deg);
+                opacity: 1;
+            }
+
+            80% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-80vh) translateX(var(--x)) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* Floating hearts */
+        .heart::before,
+        .heart::after {
+            content: "";
+            position: absolute;
+            width: 14px;
+            height: 22px;
+            background: var(--pink);
+            border-radius: 14px 14px 0 0;
+            transform: rotate(-45deg);
+            transform-origin: bottom right;
+        }
+
+        .heart::after {
+            left: 10px;
+            transform: rotate(45deg);
+            transform-origin: bottom left;
+        }
+
+        .heart {
+            width: 24px;
+            height: 22px;
+            opacity: 0;
+            filter: drop-shadow(0 4px 10px rgba(244, 114, 182, .35));
+            animation: heart-float ease-in forwards;
+        }
+
+        @keyframes heart-float {
+            0% {
+                transform: translateY(0) scale(.85);
+                opacity: 0;
+            }
+
+            15% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-70vh) scale(1);
+                opacity: 0;
+            }
+        }
+
+        /* Sparkles (tiny glowing dots) */
+        .sparkle {
+            width: 6px;
+            height: 6px;
+            background: radial-gradient(circle, #fff 0%, #fff 50%, transparent 70%);
+            border-radius: 50%;
+            opacity: 0;
+            animation: sparkle-rise ease-out forwards;
+            box-shadow: 0 0 12px #fff;
+        }
+
+        @keyframes sparkle-rise {
+            0% {
+                transform: translateY(0) scale(.6);
+                opacity: 0;
+            }
+
+            20% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-60vh) scale(1);
+                opacity: 0;
+            }
+        }
+
+        /* Background glow pulse during magic */
+        .pulse-bg {
+            animation: bgpulse 3s ease-in-out 1;
+        }
+
+        @keyframes bgpulse {
+            0% {
+                box-shadow: inset 0 0 0 rgba(147, 197, 253, 0);
+            }
+
+            50% {
+                box-shadow: inset 0 0 220px rgba(147, 197, 253, .08);
+            }
+
+            100% {
+                box-shadow: inset 0 0 0 rgba(147, 197, 253, 0);
+            }
+        }
+
+        /* Reduced motion: no animations, we'll show a toast instead */
+        @media (prefers-reduced-motion: reduce) {
+            .word {
+                animation: none !important;
+                opacity: 1 !important;
+                transform: none !important;
+            }
+
+            .paper {
+                animation: none !important;
+            }
+
+            .love {
+                animation: none !important;
+            }
+
+            .magic-layer,
+            .confetti,
+            .heart,
+            .sparkle {
+                display: none !important;
+            }
+        }
+
+        /* Toast message (for reduced motion or fallback) */
+        .toast {
+            position: fixed;
+            left: 50%;
+            bottom: 24px;
+            transform: translateX(-50%);
+            background: #111827;
+            color: #e5e7eb;
+            border: 1px solid #374151;
+            border-radius: 10px;
+            padding: .7rem 1rem;
+            box-shadow: 0 10px 24px rgba(0, 0, 0, .35);
+            z-index: 9999;
+            opacity: 0;
+            transition: opacity .2s ease, transform .2s ease;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(-4px);
+        }
     </style>
 </head>
 
 <body>
+    <div id="progress" aria-hidden="true"></div>
+
     <header>
-        <h1>💌 A Sweet Note</h1>
-        <a href="index.html">⬅ Back to Home</a>
+        <h1 style="margin:0;">💌 A letter to You</h1>
+        <div class="header-actions">
+            <a class="btn" href="index.html" aria-label="Back to Home">⬅ Back</a>
+            <button class="btn" onclick="window.print()" aria-label="Print or save as PDF">Print / Save as PDF</button>
+        </div>
     </header>
+
     <main>
-        <article class="paper" id="noteText">
+        <article class="paper" id="noteText" aria-label="Personal note">
             <!-- Words will be animated in here -->
         </article>
+
+        <div class="surprise-wrap">
+            <button id="surpriseBtn" class="surprise-btn" type="button" aria-label="Click for a magical surprise">
+                ✨ Click here for a surprise
+            </button>
+        </div>
     </main>
 
+    <!-- Magic layer (empty until triggered) -->
+    <div class="magic-layer" id="magicLayer" aria-hidden="true"></div>
+    <div class="toast" id="toast" role="status" aria-live="polite">You’re my favorite kind of magic. 💫</div>
+
     <script>
-        const text = `From the moment you stepped into my life, everything shifted in the best way possible. You’ve brought color to days that used to feel gray, laughter to moments that might have been forgotten, and a sense of comfort that I didn’t know I was missing. You’ve shown me the beauty in the smallest things—the way the world looks softer when you’re around, how even the quiet moments feel alive just because you’re in them. There’s a kind of magic in the way you make the ordinary feel extraordinary, and I can’t help but feel grateful for every single memory we’ve made so far. I hope you know that this is more than just affection; it’s admiration for the person you are—your kindness, your strength, and your ability to light up a room without even trying. No matter where life takes us, I want you to remember this: you matter more to me than I could ever put into words, and my days are better simply because they have you in them.`;
+        // Your exact note. Tabs/newlines/spaces are kept as-is.
+        const text = `\tFirst and foremost, my words or actions could never convey the love and appreciation I have for you, but I do hope that this message brings you peace and tranquility during this deranged time. I love you Kinsley. Forever and always.
+
+When you first entered my life, I didn’t know what would happen. Your charismatic smile, beautiful face, and bright personality blew me away, and maybe even intimidated me. I wanted to be near you at all times. As we began to hang out I realized that you were what I wanted in my life, not only because of who you were, but because of who you made me. You made me happy. Content. Fulfilled. You were everything I wanted, and you still are. Kinsley, there aren't words that can describe the impact and influence you have on my life, but the person I am today is accredited not only to my family or community, but to you as well. You have shown me what true love, passion, and forgiveness is. Your ability to make me laugh is unparalleled, as well as your capability of making me cry. I am not an emotional person, but I have begun to realize that you have that key to my heart. You have access to everything about me. Though I know I am far from perfect and fail in so many ways, I always want you to remember that I am yours and will always be there for you. I’m going to be a few hours away for a little while, but that time will pass with the everlasting fire of our love. Whenever I make you upset, or when I press you with my relentless inquisition, I know that you will always stay by my side.
+
+I love to read, as you know, and I’m always searching for wisdom and knowledge to apply to my life and share with others. In the process of putting all of this together, I remembered a book I once read called The Alchemist. In The Alchemist, a young shepherd named Santiago leaves his familiar home in Spain after having a dream about treasure near the Pyramids of Egypt. Along the way, he meets teachers, friends, and challenges that shape him into someone wiser and more capable. He learns new skills, overcomes setbacks, and slowly understands that the journey itself is as important as the destination.
+After traveling far, Santiago finally reaches the spot where he believes the treasure lies—only to discover it isn’t there. In that moment, he realizes something profound: the true treasure was waiting back where he began, at the very starting place of his journey. Yet he also understands that if he had never left, he would never have gained the insight, courage, and wisdom to see its value.
+I am travelling away to gain insight from individuals who are more wise, knowledgeable, and to obtain a true purpose. But I shall never forget that no matter how far I travel, my love, roots, and passion is right here at home. And each time I come back, my appreciation will only grow for each of those qualities. I am always going to come home to you, Kinsley. Never forget it.
+
+“Why do you go away? So that you can come back. So that you can see the place you came from with new eyes and extra colors. And the people there see you differently, too. Coming back to where you started is not the same as never leaving.”
+
+To my future wife in which holds my heart,
+Ryan O’Quinn`;
 
         const container = document.getElementById("noteText");
-        const words = text.split(" ");
-        words.forEach((word, i) => {
-            const span = document.createElement("span");
-            span.textContent = word;
-            span.className = "word";
-            span.style.animationDelay = `${i * 0.08}s`;
-            container.appendChild(span);
-            container.appendChild(document.createTextNode(" ")); // adds spacing between words
+
+        // Split into tokens that are either "non-whitespace" (words/punctuation) or "whitespace"
+        // This preserves ALL original spaces, tabs, and newlines.
+        const tokens = text.match(/(\S+|\s+)/g) || [text];
+
+        let i = 0;
+        const baseDelay = 0.06; // seconds between each word's start time
+
+        tokens.forEach(token => {
+            if (/^\s+$/.test(token)) {
+                // Whitespace: append as-is so formatting is preserved
+                container.appendChild(document.createTextNode(token));
+            } else {
+                // Word (or punctuation stuck to a word): animate it
+                const span = document.createElement("span");
+                span.className = "word";
+                span.textContent = token;
+                span.style.animationDelay = `${(i++) * baseDelay}s`;
+                container.appendChild(span);
+            }
         });
+
+        // Gentle emphasis on the first "I love you"
+        (function highlightLove() {
+            const html = container.innerHTML;
+            const replaced = html.replace(/I love you/, '<span class="love">I love you</span>');
+            if (replaced !== html) container.innerHTML = replaced;
+        })();
+
+        // Style your name like a handwritten signature (wrap the first occurrence).
+        (function stylizeSignature() {
+            const html = container.innerHTML;
+            const replaced = html.replace(/Ryan O’Quinn/, '<span class="signature">Ryan O’Quinn</span>');
+            if (replaced !== html) container.innerHTML = replaced;
+        })();
+
+        // Scroll progress bar logic
+        (function progressBar() {
+            const bar = document.getElementById('progress');
+            const onScroll = () => {
+                const sTop = document.documentElement.scrollTop || document.body.scrollTop;
+                const sHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const pct = sHeight ? (sTop / sHeight) * 100 : 0;
+                bar.style.width = pct + '%';
+            };
+            addEventListener('scroll', onScroll, { passive: true });
+            onScroll();
+        })();
+
+        // Surprise button -> magical effect
+        const surpriseBtn = document.getElementById('surpriseBtn');
+        const magicLayer = document.getElementById('magicLayer');
+        const toast = document.getElementById('toast');
+
+        function prefersReducedMotion() {
+            return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        }
+
+        function showToast(msg) {
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2200);
+        }
+
+        function triggerMagic() {
+            if (prefersReducedMotion()) {
+                showToast('You’re my favorite kind of magic. 💫');
+                return;
+            }
+
+            // Background gentle pulse
+            document.querySelector('.paper').classList.add('pulse-bg');
+            setTimeout(() => document.querySelector('.paper').classList.remove('pulse-bg'), 3000);
+
+            // Generate confetti, hearts, and sparkles
+            const centerX = window.innerWidth / 2;
+            const baseBottom = window.innerHeight - 20;
+
+            const totalConfetti = 90;
+            const totalHearts = 20;
+            const totalSparkles = 40;
+
+            // Helper to create and animate elements
+            function makeParticle(cls, opts = {}) {
+                const el = document.createElement('div');
+                el.className = cls;
+                el.style.left = (opts.x || centerX) + 'px';
+                el.style.bottom = (opts.y || 0) + 'px';
+                if (opts.bg) el.style.background = opts.bg;
+                if (opts.duration) el.style.animationDuration = opts.duration + 'ms';
+                if (opts.delay) el.style.animationDelay = opts.delay + 'ms';
+                if (opts.rotate) el.style.transform = `rotate(${opts.rotate}deg)`;
+                if (opts.varx) el.style.setProperty('--x', opts.varx + 'px');
+                magicLayer.appendChild(el);
+                return el;
+            }
+
+            // Confetti burst upward (we invert Y via CSS animation going negative)
+            for (let c = 0; c < totalConfetti; c++) {
+                const angle = (Math.random() * Math.PI) - Math.PI / 2; // spread left/right
+                const spread = 140 + Math.random() * 160;
+                const xOffset = Math.cos(angle) * spread;
+                const duration = 1800 + Math.random() * 1300;
+                const delay = Math.random() * 120;
+                const colors = ['linear-gradient(180deg,var(--accent),#5eead4)',
+                    'linear-gradient(180deg,var(--pink),#fb7185)',
+                    'linear-gradient(180deg,var(--lav),#a78bfa)',
+                    'linear-gradient(180deg,var(--gold),#fbbf24)'];
+                const bg = colors[Math.floor(Math.random() * colors.length)];
+                const el = makeParticle('confetti', {
+                    x: centerX + (Math.random() * 2 - 1) * 12,
+                    y: 0,
+                    bg,
+                    duration,
+                    delay,
+                    rotate: Math.random() * 360,
+                    varx: xOffset
+                });
+                // Remove after finished
+                setTimeout(() => el.remove(), duration + delay + 100);
+            }
+
+            // Hearts
+            for (let h = 0; h < totalHearts; h++) {
+                const x = centerX + (Math.random() * 2 - 1) * 160;
+                const duration = 2200 + Math.random() * 1400;
+                const delay = 150 + Math.random() * 300;
+                const el = makeParticle('heart', {
+                    x, y: 20,
+                    duration,
+                    delay
+                });
+                setTimeout(() => el.remove(), duration + delay + 120);
+            }
+
+            // Sparkles
+            for (let s = 0; s < totalSparkles; s++) {
+                const x = centerX + (Math.random() * 2 - 1) * 220;
+                const duration = 1600 + Math.random() * 1200;
+                const delay = 100 + Math.random() * 250;
+                const el = makeParticle('sparkle', {
+                    x, y: 10,
+                    duration,
+                    delay
+                });
+                setTimeout(() => el.remove(), duration + delay + 120);
+            }
+
+            // Sweet toast after the magic
+            setTimeout(() => showToast('I always come back to you.'), 1400);
+        }
+
+        surpriseBtn.addEventListener('click', triggerMagic);
     </script>
 </body>
 
