@@ -148,7 +148,8 @@
             cursor: pointer;
             display: inline-block;
             letter-spacing: .2px;
-            transition: transform .15s ease, background .2s ease, border-color .2s ease, box-shadow .2s ease, opacity .2s ease;
+            transition: transform .15s ease, background .2s ease,
+                border-color .2s ease, box-shadow .2s ease, opacity .2s ease;
             box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
         }
 
@@ -159,7 +160,8 @@
         .btn.primary {
             border-color: #1e40af;
             background: linear-gradient(135deg, var(--btn-primary-start), var(--btn-primary-end));
-            box-shadow: 0 8px 22px rgba(37, 99, 235, .25), inset 0 1px 0 rgba(255, 255, 255, .05);
+            box-shadow: 0 8px 22px rgba(37, 99, 235, .25),
+                inset 0 1px 0 rgba(255, 255, 255, .05);
         }
 
         .msg {
@@ -188,7 +190,7 @@
             font-size: .95rem;
         }
 
-        .videoWrap[hidden] {
+        .contentWrap[hidden] {
             display: none !important;
         }
 
@@ -196,11 +198,14 @@
             display: none !important;
         }
 
-        .videoWrap video {
-            width: 100%;
+        .messageBox {
+            padding: 20px;
             border-radius: 16px;
             border: 1px solid var(--lineSoft);
-            background: #000;
+            background: #1e293b;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            text-align: center;
         }
     </style>
 </head>
@@ -234,29 +239,19 @@
                 <div class="msg" id="gateMsg"></div>
             </div>
 
-            <!-- Video area (hidden until code correct) -->
-            <div class="videoWrap" id="videoWrap" hidden>
-                <!-- PLACE YOUR FILE AT: docs/media/your-video.mp4 -->
-                <!-- Then update the src path below to match your filename -->
-                <video id="vid" controls playsinline preload="metadata">
-                    <source src="media/your-video.mp4" type="video/mp4">
-                    Sorry, your browser doesn’t support embedded videos.
-                </video>
-                <p class="hint">If the video doesn’t appear, make sure your file is at
-                    <code>docs/media/your-video.mp4</code> and the <code>&lt;source&gt;</code> path matches.</p>
+            <!-- Message area (hidden until code correct) -->
+            <div class="contentWrap" id="contentWrap" hidden>
+                <div class="messageBox">
+                    Hey Kinsley, you probably thought there would be a video
+                    here. Unfortunately, the video is too large to insert into
+                    the website. So, you need to text me and I will send it to
+                    you! I love you!
+                </div>
             </div>
         </section>
     </main>
 
     <script>
-        /*
-          Passcode gate with timer & tab-switch lock.
-          Requirements implemented:
-          - Must enter passcode on every refresh (no auto-unlock state kept).
-          - After unlocking, auto-lock after 10 minutes (600,000 ms).
-          - If user switches to another tab/app, lock immediately.
-          Code: 4532
-        */
         const PASSCODE = "4532";
         const LOCK_AFTER_MS = 10 * 60 * 1000; // 10 minutes
 
@@ -264,19 +259,18 @@
         const code = document.getElementById("code");
         const btn = document.getElementById("enterBtn");
         const msg = document.getElementById("gateMsg");
-        const wrap = document.getElementById("videoWrap");
+        const wrap = document.getElementById("contentWrap");
         const toggleVis = document.getElementById("toggleVis");
-        const video = document.getElementById("vid");
         const countdownEl = document.getElementById("countdown");
 
         let lockTimeoutId = null;
         let tickIntervalId = null;
         let deadline = null;
 
-        // No auto-unlock on load. Gate is shown by default.
-
         btn.addEventListener("click", tryOpen);
-        code.addEventListener("keydown", (e) => { if (e.key === "Enter") tryOpen(); });
+        code.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") tryOpen();
+        });
 
         toggleVis.addEventListener("click", () => {
             if (code.type === "password") {
@@ -291,17 +285,13 @@
             code.focus();
         });
 
-        // Lock immediately when leaving/blur/hidden
         document.addEventListener("visibilitychange", () => {
             if (document.hidden) {
                 lockGate("You switched tabs. Enter the code again.");
             }
         });
 
-        window.addEventListener("pagehide", () => {
-            // Just in case some browsers don't fire visibilitychange reliably
-            lockGate();
-        });
+        window.addEventListener("pagehide", () => lockGate());
 
         function tryOpen() {
             const val = (code.value || "").trim();
@@ -311,7 +301,7 @@
                 return;
             }
             if (val === PASSCODE) {
-                showVideo();
+                showContent();
                 showMsg("Access granted.", false);
                 startTimer();
             } else {
@@ -320,34 +310,23 @@
             }
         }
 
-        function showVideo() {
+        function showContent() {
             gate.hidden = true;
             wrap.hidden = false;
-            // Optional: cache-bust the video source on each unlock to avoid stale CDN cache
-            const src = document.querySelector("video source");
-            if (src) {
-                const base = src.src.split("?")[0];
-                src.src = base + "?v=" + Date.now();
-                try { video.load(); } catch (e) { }
-            }
             code.value = "";
             countdownEl.hidden = false;
         }
 
         function lockGate(reason) {
-            // Pause and hide video
-            try { video.pause(); } catch (e) { }
             wrap.hidden = true;
             gate.hidden = false;
 
-            // Clear timers
             if (lockTimeoutId) clearTimeout(lockTimeoutId);
             if (tickIntervalId) clearInterval(tickIntervalId);
             lockTimeoutId = null;
             tickIntervalId = null;
             deadline = null;
 
-            // Reset UI
             countdownEl.hidden = true;
             countdownEl.textContent = "Access expires in —";
             if (reason) showMsg(reason, true); else showMsg("", false);
@@ -355,16 +334,13 @@
         }
 
         function startTimer() {
-            // Clear any previous
             if (lockTimeoutId) clearTimeout(lockTimeoutId);
             if (tickIntervalId) clearInterval(tickIntervalId);
 
             deadline = Date.now() + LOCK_AFTER_MS;
+            lockTimeoutId = setTimeout(() =>
+                lockGate("Time expired. Please enter the code again."), LOCK_AFTER_MS);
 
-            // Auto-lock when time is up
-            lockTimeoutId = setTimeout(() => lockGate("Time expired. Please enter the code again."), LOCK_AFTER_MS);
-
-            // Show countdown
             updateCountdown();
             tickIntervalId = setInterval(updateCountdown, 1000);
         }
